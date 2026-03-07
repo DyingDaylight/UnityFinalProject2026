@@ -1,37 +1,48 @@
+using System;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
-    private float moveSpeed = 1f;
+    private float moveSpeed = 3f;
+    
+    private Rigidbody2D rb;
+    private Vector2 input;
+    private Vector2 movement;
     
     private Vector3 originalScale;
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Awake()
     {
-        originalScale = transform.localScale;
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        float horizontalValue = Input.GetAxisRaw(("Horizontal"));
-        float verticalValue = Input.GetAxisRaw(("Vertical"));
+        input.x = Input.GetAxisRaw(("Horizontal"));
+        input.y = Input.GetAxisRaw(("Vertical"));
         
-        if (horizontalValue != 0 || verticalValue != 0)
+        movement = input.normalized; // do not move faster by diagonal
+        
+        if (input.x != 0 || input.y != 0)
         {
-            float x = horizontalValue < 0 ? originalScale.x * -1 : originalScale.x;
+            /*float x = horizontalValue < 0 ? originalScale.x * -1 : originalScale.x;
             transform.localScale = new Vector3(
                 x,
                 originalScale.y,
-                originalScale.x);
+                originalScale.x);*/
             
-            Vector3 deltaX = Vector3.right * horizontalValue * moveSpeed * Time.deltaTime;
-            Vector3 deltaY = Vector3.up * verticalValue * moveSpeed * Time.deltaTime;
-            Vector3 newPosition = transform.position + deltaX + deltaY;
-            transform.position = newPosition;
+            //Vector3 deltaX = Vector3.right * horizontalValue * moveSpeed * Time.deltaTime;
+            //Vector3 deltaY = Vector3.up * verticalValue * moveSpeed * Time.deltaTime;
+            //Vector3 newPosition = transform.position + deltaX + deltaY;
+            
         }
-                
+    }
+
+    private void FixedUpdate()
+    {
+        rb.linearVelocity = movement * moveSpeed;
     }
 }
