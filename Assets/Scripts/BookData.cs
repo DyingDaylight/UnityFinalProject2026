@@ -1,16 +1,18 @@
 using UnityEngine;
 
-public class Book : MonoBehaviour
+[CreateAssetMenu(fileName = "NewBook", menuName = "Library/Book")]
+public class BookData : ScriptableObject
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [Header("Book Identity")]
+    public string bookTitle;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [Header("Visuals")]
+    // This is for the big UI screen
+    public Sprite coverImage;
+    // ADD THIS: This is for the small book on the floor
+    public Sprite worldIcon; 
+
+    [Header("Content")]
+    [TextArea(15, 30)]
+    public string pageContent;
 }
