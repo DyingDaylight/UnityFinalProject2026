@@ -22,13 +22,10 @@ public class DroppedBook : MonoBehaviour
 
     private void OnMouseDown()
     {
-        // Check if the UI Manager is present and open the book
         if (UIManager.Instance != null)
         {
-            UIManager.Instance.OpenBook(data);
-            
-            // Optional: Destroy the book on the floor after reading
-            // Destroy(gameObject);
+            // Pass 'data' AND 'this.gameObject' to the manager
+            UIManager.Instance.OpenBook(data, this.gameObject);
         }
     }
 }
