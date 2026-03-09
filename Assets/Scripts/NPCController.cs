@@ -114,8 +114,13 @@ public class NPCController : MonoBehaviour
         state = newState;
 
         if (state == NPCState.WaitingForPlayer)
-            HintManager.Instance.ShowInteraction(transform, "[E]");
-        
+        {
+            if (CanInteract())
+                HintManager.Instance.ShowInteraction(transform, "[E]");
+            else
+                HintManager.Instance.HideInteraction();
+        }
+
         if (state == NPCState.Patrolling)
             DialogueSystem.Instance.EndDialogue();
     }
@@ -257,5 +262,29 @@ public class NPCController : MonoBehaviour
             moveSpeed = daySpeed;
         else
             moveSpeed = nightSpeed;
+    }
+    
+    private bool CanInteract()
+    {
+        if (questData == null)
+            return true;
+
+        QuestInstance quest = QuestManager.Instance.GetQuest(questData);
+
+        switch (quest.State)
+        {
+            case QuestState.NotStarted:
+                return questData.IsAvailableNow();
+
+            case QuestState.InProgress:
+            case QuestState.ReadyToComplete:
+                return true;
+
+            case QuestState.Completed:
+                return false;
+
+            default:
+                return false;
+        }
     }
 }

@@ -4,15 +4,16 @@ using UnityEngine;
 public class TimeManager : MonoBehaviour
 {
     public static TimeManager Instance;
-    
-    [Header("Time Settings")]
-    [SerializeField] private float dayDuration = 40f;
+
+    [Header("Time Settings")] [SerializeField]
+    private float dayDuration = 40f;
+
     [SerializeField] private float nightDuration = 40f;
-    
+
     private float timer;
-    
+
     public DayTime CurrentTimeOfDay { get; private set; }
-    
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -48,5 +49,20 @@ public class TimeManager : MonoBehaviour
         CurrentTimeOfDay = CurrentTimeOfDay == DayTime.Day
             ? DayTime.Night
             : DayTime.Day;
+    }
+    
+    public float CurrentPhaseDuration()
+    {
+        return CurrentTimeOfDay == DayTime.Day ? dayDuration : nightDuration;
+    }
+    
+    public float CurrentPhaseProgress()
+    {
+        return CurrentPhaseDuration() <= 0f ? 0f : timer / CurrentPhaseDuration();
+    }
+
+    public float TimeRemaining()
+    {
+        return CurrentPhaseDuration() - timer;
     }
 }
