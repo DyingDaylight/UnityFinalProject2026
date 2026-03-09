@@ -4772,6 +4772,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17304917f75fbd14599fe6fddfa4429b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dayDuration: 10
+  nightDuration: 10
 --- !u!1 &1507714266
 GameObject:
   m_ObjectHideFlags: 0
@@ -4853,8 +4855,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4a2b48f66956f74bb725f5add7ae790, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dayColor: {r: 1, g: 1, b: 1, a: 0}
+  dayColor: {r: 0.07058824, g: 0.07058824, b: 0.29803923, a: 0}
   nightColor: {r: 0.069, g: 0.069, b: 0.3, a: 0.8}
+  transitionDuration: 3
 --- !u!114 &1570931465
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,6 +5,12 @@ public class TimeManager : MonoBehaviour
 {
     public static TimeManager Instance;
     
+    [Header("Time Settings")]
+    [SerializeField] private float dayDuration = 40f;
+    [SerializeField] private float nightDuration = 40f;
+    
+    private float timer;
+    
     public DayTime CurrentTimeOfDay { get; private set; }
     
     private void Awake()
@@ -21,6 +27,16 @@ public class TimeManager : MonoBehaviour
     // TODO: temp method
     private void Update()
     {
+        timer += Time.deltaTime;
+
+        float duration = CurrentTimeOfDay == DayTime.Day ? dayDuration : nightDuration;
+
+        if (timer >= duration)
+        {
+            ToggleDayTime();
+            timer = 0f;
+        }
+        
         if (Input.GetKeyDown(KeyCode.T))
         {
             ToggleDayTime();
@@ -32,7 +48,5 @@ public class TimeManager : MonoBehaviour
         CurrentTimeOfDay = CurrentTimeOfDay == DayTime.Day
             ? DayTime.Night
             : DayTime.Day;
-
-        Debug.Log("Time of day changed to: " + CurrentTimeOfDay);
     }
 }
