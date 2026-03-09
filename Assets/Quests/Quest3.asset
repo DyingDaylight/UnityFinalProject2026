@@ -18,3 +18,5 @@ MonoBehaviour:
   readyDialogue: You've done it! Thank you so much.
   completedDialogue: Thanks again for your help.
   objectiveDescription: TBD
+  availability: 2
+  unavailableDialogue: I only talk about this at night.

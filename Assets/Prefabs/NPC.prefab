@@ -178,8 +178,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointA: {fileID: 0}
   pointB: {fileID: 0}
-  speed: 2
   arriveDistance: 0.05
+  daySpeed: 1.5
+  nightSpeed: 1.5
+  dayTint: {r: 1, g: 1, b: 1, a: 1}
+  nightTint: {r: 0.4528302, g: 0.03203987, b: 0.10932283, a: 1}
   player: {fileID: 0}
   stopDistance: 1.3
   questData: {fileID: 11400000, guid: 32a3e1c723c665748b590bc1f4c00496, type: 2}

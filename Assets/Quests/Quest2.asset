@@ -18,3 +18,5 @@ MonoBehaviour:
   readyDialogue: You've done it! Thank you so much.
   completedDialogue: Thanks again for your help.
   objectiveDescription: Sort the harvset
+  availability: 1
+  unavailableDialogue: Come back during the day.

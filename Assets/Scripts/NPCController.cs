@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NPCPatrol : MonoBehaviour
+public class NPCController : MonoBehaviour
 {
     private enum NPCState
     {
@@ -12,9 +12,14 @@ public class NPCPatrol : MonoBehaviour
     [Header("Patrol")]
     [SerializeField] private Transform pointA;
     [SerializeField] private Transform pointB;
-    [SerializeField] private float speed = 1.5f;
     [SerializeField] private float arriveDistance = 0.05f;
 
+    [Header("Day / Night")]
+    [SerializeField] private float daySpeed = 1.5f;
+    [SerializeField] private float nightSpeed = 3f;
+    [SerializeField] private Color dayTint = Color.white;
+    [SerializeField] private Color nightTint = Color.gray;
+    
     [Header("Player Detection")]
     [SerializeField] private Transform player;
     [SerializeField] private float stopDistance = 1.2f;
@@ -22,6 +27,7 @@ public class NPCPatrol : MonoBehaviour
     [Header("Quest")]
     [SerializeField] private QuestData questData;
     
+    private SpriteRenderer spriteRenderer;
     private Animator animator;
     private Transform target;
 
@@ -30,6 +36,9 @@ public class NPCPatrol : MonoBehaviour
     private Vector2 lastMoveDirection = Vector2.down;
     private string currentAnimation;
     private Vector3 originalScale;
+    private float moveSpeed;
+    
+    private DayTime currentTimeOfDay;
     
     private bool playerInRange;
     
@@ -39,15 +48,20 @@ public class NPCPatrol : MonoBehaviour
         transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);
         UpdateVisual(false);
         originalScale = transform.localScale;
+        
+        currentTimeOfDay = TimeManager.Instance.CurrentTimeOfDay;
+        ApplyTimeOfDaySettings();
     }
     
     private void Awake()
-    { 
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
     }
     
     private void Update()
     {
+        CheckTimeOfDay();
         UpdateState();
         
         if (state == NPCState.WaitingForPlayer && playerInRange)
@@ -124,7 +138,7 @@ public class NPCPatrol : MonoBehaviour
                 lastMoveDirection = new Vector2(0, Mathf.Sign(direction.y));
         }
 
-        Vector2 newPos = Vector2.MoveTowards(position, targetPos, speed * Time.deltaTime);
+        Vector2 newPos = Vector2.MoveTowards(position, targetPos, moveSpeed * Time.deltaTime);
         transform.position = new Vector3(newPos.x, newPos.y, transform.position.z);
 
         UpdateVisual(true);
@@ -190,6 +204,12 @@ public class NPCPatrol : MonoBehaviour
         switch (quest.State)
         {
             case QuestState.NotStarted:
+                if (!questData.IsAvailableNow())
+                {
+                    DialogueSystem.Instance.StartDialogue(questData.unavailableDialogue);
+                    break;
+                }
+                
                 DialogueSystem.Instance.StartDialogue(questData.startDialogue);
                 quest.StartQuest();
                 break;
@@ -207,5 +227,35 @@ public class NPCPatrol : MonoBehaviour
                 DialogueSystem.Instance.StartDialogue(questData.completedDialogue);
                 break;
         }
+    }
+    
+    private void CheckTimeOfDay()
+    {
+        if (TimeManager.Instance == null)
+            return;
+
+        DayTime newTimeOfDay = TimeManager.Instance.CurrentTimeOfDay;
+
+        if (newTimeOfDay == currentTimeOfDay)
+            return;
+
+        currentTimeOfDay = newTimeOfDay;
+        ApplyTimeOfDaySettings();
+    }
+    
+    private void ApplyTimeOfDaySettings()
+    {
+        if (spriteRenderer != null)
+        {
+            if (currentTimeOfDay == DayTime.Day)
+                spriteRenderer.color = dayTint;
+            else
+                spriteRenderer.color = nightTint;
+        }
+
+        if (currentTimeOfDay == DayTime.Day)
+            moveSpeed = daySpeed;
+        else
+            moveSpeed = nightSpeed;
     }
 }
