@@ -19,9 +19,8 @@ public class NPCPatrol : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private float stopDistance = 1.2f;
     
-    [Header("Dialogue")]
-    [SerializeField] private DialogueSystem dialogueSystem;
-    [SerializeField] private string dialogueLine = "Hello traveler.";
+    [Header("Quest")]
+    [SerializeField] private QuestData questData;
     
     private Animator animator;
     private Transform target;
@@ -43,7 +42,7 @@ public class NPCPatrol : MonoBehaviour
     }
     
     private void Awake()
-    {
+    { 
         animator = GetComponent<Animator>();
     }
     
@@ -102,6 +101,9 @@ public class NPCPatrol : MonoBehaviour
 
         if (state == NPCState.WaitingForPlayer)
             HintManager.Instance.ShowInteraction(transform, "[E]");
+        
+        if (state == NPCState.Patrolling)
+            DialogueSystem.Instance.EndDialogue();
     }
     
     private void Patrol()
@@ -168,13 +170,42 @@ public class NPCPatrol : MonoBehaviour
     
     private void GiveQuest()
     {
-        if (!dialogueSystem.IsDialogueActive())
+        if (!DialogueSystem.Instance.IsDialogueActive())
         {
-            dialogueSystem.StartDialogue(dialogueLine);
+            HandleQuestInteraction();
         }
         else
         {
-            dialogueSystem.EndDialogue();
+            DialogueSystem.Instance.EndDialogue();
+        }
+    }
+    
+    private void HandleQuestInteraction()
+    {
+        if (questData == null)
+            return;
+
+        QuestInstance quest = QuestManager.Instance.GetQuest(questData);
+
+        switch (quest.State)
+        {
+            case QuestState.NotStarted:
+                DialogueSystem.Instance.StartDialogue(questData.startDialogue);
+                quest.StartQuest();
+                break;
+
+            case QuestState.InProgress:
+                DialogueSystem.Instance.StartDialogue(questData.inProgressDialogue);
+                break;
+
+            case QuestState.ReadyToComplete:
+                DialogueSystem.Instance.StartDialogue(questData.readyDialogue);
+                quest.CompleteQuest();
+                break;
+
+            case QuestState.Completed:
+                DialogueSystem.Instance.StartDialogue(questData.completedDialogue);
+                break;
         }
     }
 }

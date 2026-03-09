@@ -62,7 +62,6 @@ public class HintView : MonoBehaviour
 
     private IEnumerator FadeTo(float targetAlpha)
     {
-        Debug.Log("FadeTo");
         float startAlpha = canvasGroup.alpha;
         float time = 0f;
 
