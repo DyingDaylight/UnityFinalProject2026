@@ -1,3 +1,4 @@
+using Quest;
 using UnityEngine;
 
 public class NPCController : MonoBehaviour
@@ -220,7 +221,23 @@ public class NPCController : MonoBehaviour
                 break;
 
             case QuestState.InProgress:
-                DialogueSystem.Instance.StartDialogue(questData.inProgressDialogue);
+                QuestTurnInResult result =
+                    QuestManager.Instance.TryCompleteQuest(questData);
+
+                switch (result)
+                {
+                    case QuestTurnInResult.Completed:
+                        DialogueSystem.Instance.StartDialogue(questData.readyDialogue);
+                        break;
+
+                    case QuestTurnInResult.WrongItem:
+                        DialogueSystem.Instance.StartDialogue(questData.wrongItemDialogue);
+                        break;
+
+                    case QuestTurnInResult.MissingItem:
+                        DialogueSystem.Instance.StartDialogue(questData.inProgressDialogue);
+                        break;
+                }
                 break;
 
             case QuestState.ReadyToComplete:

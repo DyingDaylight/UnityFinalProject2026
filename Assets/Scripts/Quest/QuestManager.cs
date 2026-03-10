@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Quest;
 using UnityEngine;
 
 
@@ -44,5 +45,45 @@ public class QuestManager : MonoBehaviour
                 }
             }
         }
+    }
+    
+    public void CheckQuestItem(string itemId)
+    {
+        foreach (var quest in quests.Values)
+        {
+            if (quest.State == QuestState.InProgress &&
+                quest.Data.requiredItem == itemId)
+            {
+                quest.MarkReadyToComplete();
+            }
+        }
+    }
+
+    public QuestTurnInResult TryCompleteQuest(QuestData questData)
+    {
+        QuestInstance quest = GetQuest(questData);
+        
+        if (quest.State != QuestState.InProgress)
+            return QuestTurnInResult.MissingItem;
+        
+        if (!InventoryManager.Instance.HasAnyItem(questData.requiredCategory))
+            return QuestTurnInResult.MissingItem;
+        
+        if (!InventoryManager.Instance.HasItem(
+                questData.requiredCategory,
+                questData.requiredItem,
+                questData.requiredItemCount))
+        {
+            return QuestTurnInResult.WrongItem;
+        }
+        
+        InventoryManager.Instance.RemoveItem(
+            questData.requiredCategory,
+            questData.requiredItem,
+            questData.requiredItemCount);
+
+        quest.CompleteQuest();
+
+        return QuestTurnInResult.Completed;
     }
 }

@@ -15,6 +15,11 @@ MonoBehaviour:
   questId: find_book
   startDialogue: Hello traveler. I lost my book. Can you help me find it?
   inProgressDialogue: Please find my book in the library.
+  wrongItemDialogue: That's not the book I've asked for.
   readyDialogue: You found it! Thank you so much.
   completedDialogue: Thanks again for your help.
-  objectiveDescription: Find the lost ring.
+  requiredCategory: 0
+  requiredItem: Moby Dick (Herman Melville)
+  requiredItemCount: 1
+  availability: 0
+  unavailableDialogue: 

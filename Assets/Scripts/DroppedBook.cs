@@ -5,6 +5,8 @@ public class DroppedBook : MonoBehaviour
     private BookData data;
     private SpriteRenderer spriteRenderer;
 
+    public BookData BookData { get { return data; } private set { data = value; } }
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();

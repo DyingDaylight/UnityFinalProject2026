@@ -1,3 +1,4 @@
+using Quest;
 using UnityEngine;
 using TMPro;
 
@@ -37,6 +38,12 @@ public class UIManager : MonoBehaviour
     // New method for the "Take" button
     public void TakeBook()
     {
+        DroppedBook book = currentBookObject.GetComponent<DroppedBook>();
+        string bookName = book.BookData.bookTitle;
+        InventoryManager.Instance.AddItem(
+            ItemCategory.Book,
+            bookName);
+        
         if (currentBookObject != null)
         {
             // Destroy the book from the world
@@ -47,5 +54,6 @@ public class UIManager : MonoBehaviour
         CloseBook();
         
         Debug.Log("Book taken and removed from the map");
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Quest;
+using UnityEngine;
 
 [CreateAssetMenu(menuName = "Quests/Quest Data")]
 public class QuestData : ScriptableObject
@@ -8,11 +9,14 @@ public class QuestData : ScriptableObject
     [Header("Dialogue")]
     [TextArea] public string startDialogue;
     [TextArea] public string inProgressDialogue;
+    [TextArea] public string wrongItemDialogue;
     [TextArea] public string readyDialogue;
     [TextArea] public string completedDialogue;
 
-    [Header("Objective")]
-    public string objectiveDescription;
+    [Header("Required Item")]
+    public ItemCategory requiredCategory;
+    public string requiredItem;
+    public int requiredItemCount = 1;
     
     [Header("Availability")]
     public QuestAvailability availability = QuestAvailability.Always;
