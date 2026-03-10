@@ -16,12 +16,19 @@ public class PlayerMovement : MonoBehaviour
     
     private Vector3 originalScale;
     
+    [Header("Audio Settings")]
+    [SerializeField] private AudioClip[] stepSounds; 
+    [SerializeField] private float stepVolume = 0.5f;
+
+    private AudioSource audioSource;
+    
     private string currentAnimation;
     
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
     }
 
     void Start()
@@ -60,6 +67,13 @@ public class PlayerMovement : MonoBehaviour
         rb.linearVelocity = movement * moveSpeed;
     }
 
+    public void PlayFootstep()
+    {
+        if (stepSounds == null || stepSounds.Length == 0) return;
+        int index = UnityEngine.Random.Range(0, stepSounds.Length);
+        audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+        audioSource.PlayOneShot(stepSounds[index], stepVolume);
+    }
     private void UpdateDirection(bool isMoving)
     {
         string nextAnimation;
