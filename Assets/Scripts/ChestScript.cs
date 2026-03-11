@@ -45,7 +45,7 @@ public class Chest : MonoBehaviour
         if (rb != null)
         {
             float randomX = Random.Range(-2f, 2f); 
-            Vector2 jumpForce = new Vector2(randomX, 5f); 
+            Vector2 jumpForce = new Vector2(randomX, 1.5f); 
             
             rb.AddForce(jumpForce, ForceMode2D.Impulse);
         }
