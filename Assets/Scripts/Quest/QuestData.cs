@@ -1,4 +1,5 @@
-﻿using Quest;
+﻿using DayNight;
+using Quest;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Quests/Quest Data")]

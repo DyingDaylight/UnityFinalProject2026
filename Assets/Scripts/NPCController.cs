@@ -1,3 +1,4 @@
+using DayNight;
 using Quest;
 using UnityEngine;
 
@@ -27,37 +28,39 @@ public class NPCController : MonoBehaviour
     
     [Header("Quest")]
     [SerializeField] private QuestData questData;
-    
-    private SpriteRenderer spriteRenderer;
-    private Animator animator;
-    private Transform target;
 
-    private NPCState state = NPCState.Patrolling;
-    
-    private Vector2 lastMoveDirection = Vector2.down;
-    private string currentAnimation;
-    private Vector3 originalScale;
+    // Components
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
+
     private float moveSpeed;
-    
-    private DayTime currentTimeOfDay;
-    
+    private Transform target;
     private bool playerInRange;
-    
-    private void Start()
-    {
-        target = pointA;
-        transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);
-        UpdateVisual(false);
-        originalScale = transform.localScale;
-        
-        currentTimeOfDay = TimeManager.Instance.CurrentTimeOfDay;
-        ApplyTimeOfDaySettings();
-    }
-    
+    private Vector3 originalScale;
+    private string currentAnimation;
+    private DayTime currentTimeOfDay;
+    private NPCState state = NPCState.Patrolling;
+    private Vector2 lastMoveDirection = Vector2.down;
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+    }
+    
+    private void Start()
+    {
+        // setup patrolling
+        target = pointA;
+        transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);
+        
+        // setup sprite direction
+        originalScale = transform.localScale;
+        UpdateVisual(false);
+
+        // setup day/night behavior and appearance
+        currentTimeOfDay = TimeManager.Instance.CurrentTimeOfDay;
+        ApplyTimeOfDaySettings();
     }
     
     private void Update()
@@ -69,7 +72,7 @@ public class NPCController : MonoBehaviour
         {
             if (Input.GetButtonDown("Interact"))
             {
-                GiveQuest();
+                Interact();
             }
         }
 
@@ -85,6 +88,20 @@ public class NPCController : MonoBehaviour
         }
     }
     
+    private void CheckTimeOfDay()
+    {
+        if (TimeManager.Instance == null)
+            return;
+
+        DayTime newTimeOfDay = TimeManager.Instance.CurrentTimeOfDay;
+
+        if (newTimeOfDay == currentTimeOfDay)
+            return;
+
+        currentTimeOfDay = newTimeOfDay;
+        ApplyTimeOfDaySettings();
+    }
+    
     private void UpdateState()
     {
         if (player == null)
@@ -95,20 +112,32 @@ public class NPCController : MonoBehaviour
         playerInRange = distance <= stopDistance;
 
         if (playerInRange)
-        {
             ChangeState(NPCState.WaitingForPlayer);
-        }
         else if (!playerInRange)
-        {
             ChangeState(NPCState.Patrolling);
+    }
+    
+    private void ApplyTimeOfDaySettings()
+    {
+        if (spriteRenderer != null)
+        {
+            if (currentTimeOfDay == DayTime.Day)
+                spriteRenderer.color = dayTint;
+            else
+                spriteRenderer.color = nightTint;
         }
+
+        if (currentTimeOfDay == DayTime.Day)
+            moveSpeed = daySpeed;
+        else
+            moveSpeed = nightSpeed;
     }
     
     private void ChangeState(NPCState newState)
     {
         if (state == newState)
             return;
-
+        
         if (state == NPCState.WaitingForPlayer)
             HintManager.Instance.HideInteraction();
 
@@ -154,7 +183,6 @@ public class NPCController : MonoBehaviour
         if (distance <= arriveDistance)
             target = target == pointA ? pointB : pointA;
     }
-
     
     private void UpdateVisual(bool isMoving)
     {
@@ -188,7 +216,7 @@ public class NPCController : MonoBehaviour
         currentAnimation = nextAnimation;
     }
     
-    private void GiveQuest()
+    private void Interact()
     {
         if (!DialogueSystem.Instance.IsDialogueActive())
         {
@@ -221,8 +249,7 @@ public class NPCController : MonoBehaviour
                 break;
 
             case QuestState.InProgress:
-                QuestTurnInResult result =
-                    QuestManager.Instance.TryCompleteQuest(questData);
+                QuestTurnInResult result = QuestManager.Instance.TryCompleteQuest(questData);
 
                 switch (result)
                 {
@@ -249,36 +276,6 @@ public class NPCController : MonoBehaviour
                 DialogueSystem.Instance.StartDialogue(questData.completedDialogue);
                 break;
         }
-    }
-    
-    private void CheckTimeOfDay()
-    {
-        if (TimeManager.Instance == null)
-            return;
-
-        DayTime newTimeOfDay = TimeManager.Instance.CurrentTimeOfDay;
-
-        if (newTimeOfDay == currentTimeOfDay)
-            return;
-
-        currentTimeOfDay = newTimeOfDay;
-        ApplyTimeOfDaySettings();
-    }
-    
-    private void ApplyTimeOfDaySettings()
-    {
-        if (spriteRenderer != null)
-        {
-            if (currentTimeOfDay == DayTime.Day)
-                spriteRenderer.color = dayTint;
-            else
-                spriteRenderer.color = nightTint;
-        }
-
-        if (currentTimeOfDay == DayTime.Day)
-            moveSpeed = daySpeed;
-        else
-            moveSpeed = nightSpeed;
     }
     
     private bool CanInteract()
