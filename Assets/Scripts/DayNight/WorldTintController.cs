@@ -23,7 +23,7 @@ namespace DayNight
         private void Start()
         {
             currentTimeOfDay = TimeManager.Instance.CurrentTimeOfDay;
-            ApplyTimeOfDay();
+            ApplyTimeOfDayImmediate();
         }
 
         private void Update()
@@ -35,10 +35,20 @@ namespace DayNight
                 return;
 
             currentTimeOfDay = TimeManager.Instance.CurrentTimeOfDay;
-            ApplyTimeOfDay();
+            ApplyTimeOfDaySmooth();
         }
 
-        private void ApplyTimeOfDay()
+        private void ApplyTimeOfDayImmediate()
+        {
+            if (worldTintOverlay == null)
+                return;
+
+            worldTintOverlay.color = currentTimeOfDay == DayTime.Day
+                ? dayColor
+                : nightColor;
+        }
+        
+        private void ApplyTimeOfDaySmooth()
         {
             Color targetColor = currentTimeOfDay == DayTime.Day
                 ? dayColor
