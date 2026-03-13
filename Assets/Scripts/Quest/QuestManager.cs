@@ -9,7 +9,7 @@ public class QuestManager : MonoBehaviour
     public static QuestManager Instance { get; private set; }
 
     private Dictionary<string, QuestInstance> quests = new();
-
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -84,6 +84,8 @@ public class QuestManager : MonoBehaviour
 
         quest.CompleteQuest();
 
+        FinaleManager.Instance.CheckFinale();
+        
         return QuestTurnInResult.Completed;
     }
     
@@ -113,4 +115,5 @@ public class QuestManager : MonoBehaviour
 
         return false;
     }
+    
 }
