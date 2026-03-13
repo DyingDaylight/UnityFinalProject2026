@@ -21,14 +21,32 @@ public class Chest : MonoBehaviour
 
     private void OnMouseDown()
     {
+        Debug.Log("Chest");
         if (!isOpened)
         {
             OpenChest();
+            Debug.Log("Chest opened");
         }
     }
 
+    private void OnMouseEnter()
+    {
+        if (!isOpened && HintManager.Instance != null)
+        {
+            HintManager.Instance.ShowInteraction(transform, "Open Chest (Left click)");
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        if (HintManager.Instance != null)
+        {
+            HintManager.Instance.HideInteraction();
+        }
+    }
     private void OpenChest()
     {
+        if (HintManager.Instance != null) HintManager.Instance.HideInteraction();
         isOpened = true;
 
         if (openSound != null)

@@ -45,7 +45,7 @@ public class HintManager : MonoBehaviour
             return;
 
         interactionTarget = target;
-        //interactionHint.SetText(text);
+        interactionHint.SetText(text);
 
         if (dialogueSystem != null && dialogueSystem.IsDialogueActive())
             return;
