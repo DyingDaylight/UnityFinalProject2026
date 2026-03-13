@@ -1730,6 +1730,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetScene: LibraryScene
   targetSpawn: ToLib
+  entryDelay: 0.5
 --- !u!114 &845909921
 MonoBehaviour:
   m_ObjectHideFlags: 0

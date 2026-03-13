@@ -7,7 +7,7 @@ public class SceneTransitionTrigger : MonoBehaviour
     [SerializeField] private string targetScene; 
     [SerializeField] private string targetSpawn; 
     
-    private float entryDelay = 1.0f; 
+    [SerializeField] private float entryDelay = 1.0f; 
     private float timer = 0f;
     
     private void Start()
