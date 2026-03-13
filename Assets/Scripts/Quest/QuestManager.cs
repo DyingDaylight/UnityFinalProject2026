@@ -86,4 +86,31 @@ public class QuestManager : MonoBehaviour
 
         return QuestTurnInResult.Completed;
     }
+    
+    public bool ArePrerequisitesCompleted(QuestData questData)
+    {
+        if (questData.requiredQuests == null)
+            return true;
+
+        foreach (QuestData prereq in questData.requiredQuests)
+        {
+            QuestInstance q = GetQuest(prereq);
+
+            if (q.State != QuestState.Completed)
+                return false;
+        }
+
+        return true;
+    }
+    
+    public bool HasActiveQuest()
+    {
+        foreach (QuestInstance quest in quests.Values)
+        {
+            if (quest.State == QuestState.InProgress || quest.State == QuestState.ReadyToComplete)
+                return true;
+        }
+
+        return false;
+    }
 }

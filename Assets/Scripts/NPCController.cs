@@ -238,6 +238,18 @@ public class NPCController : MonoBehaviour
         switch (quest.State)
         {
             case QuestState.NotStarted:
+                if (!QuestManager.Instance.ArePrerequisitesCompleted(questData))
+                {
+                    DialogueSystem.Instance.StartDialogue(questData.GetPrerequisitesBlockedDialogue());
+                    break;
+                }
+                
+                if (QuestManager.Instance.HasActiveQuest())
+                {
+                    DialogueSystem.Instance.StartDialogue(questData.GetActiveQuestBlockedDialogue());
+                    break;
+                }
+                
                 if (!questData.IsAvailableNow())
                 {
                     DialogueSystem.Instance.StartDialogue(questData.unavailableDialogue);
@@ -288,7 +300,8 @@ public class NPCController : MonoBehaviour
         switch (quest.State)
         {
             case QuestState.NotStarted:
-                return questData.IsAvailableNow();
+                return questData.IsAvailableNow() && !QuestManager.Instance.HasActiveQuest()
+                    && QuestManager.Instance.ArePrerequisitesCompleted(questData);
 
             case QuestState.InProgress:
             case QuestState.ReadyToComplete:

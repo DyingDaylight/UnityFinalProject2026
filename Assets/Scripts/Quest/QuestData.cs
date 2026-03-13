@@ -7,6 +7,9 @@ public class QuestData : ScriptableObject
 {
     public string questId;
 
+    [Header("Prerequisites")]
+    public QuestData[] requiredQuests;
+    
     [Header("Dialogue")]
     [TextArea] public string startDialogue;
     [TextArea] public string inProgressDialogue;
@@ -14,6 +17,10 @@ public class QuestData : ScriptableObject
     [TextArea] public string readyDialogue;
     [TextArea] public string completedDialogue;
 
+    [Header("Unavailable Dialogues")]
+    [SerializeField][TextArea] private string prerequisitesBlockedDialogue;
+    [SerializeField][TextArea] private string activeQuestBlockedDialogue;
+    
     [Header("Required Item")]
     public ItemCategory requiredCategory;
     public string requiredItem;
@@ -47,5 +54,19 @@ public class QuestData : ScriptableObject
             default:
                 return true;
         }
+    }
+    
+    public string GetPrerequisitesBlockedDialogue()
+    {
+        return string.IsNullOrWhiteSpace(prerequisitesBlockedDialogue)
+            ? "You should help someone else first."
+            : prerequisitesBlockedDialogue;
+    }
+
+    public string GetActiveQuestBlockedDialogue()
+    {
+        return string.IsNullOrWhiteSpace(activeQuestBlockedDialogue)
+            ? "Finish your current task first."
+            : activeQuestBlockedDialogue;
     }
 }

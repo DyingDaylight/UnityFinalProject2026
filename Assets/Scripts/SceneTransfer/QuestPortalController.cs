@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class QuestPortalController : MonoBehaviour
 {
-    [SerializeField] private QuestData quest;
     [SerializeField] private Collider2D portalCollider;
 
     private void Awake()
@@ -13,12 +12,10 @@ public class QuestPortalController : MonoBehaviour
 
     private void Update()
     {
-        if (QuestManager.Instance == null || quest == null)
+        if (QuestManager.Instance == null)
             return;
 
-        QuestInstance q = QuestManager.Instance.GetQuest(quest);
-
-        bool shouldBeAvailable = q.State == QuestState.InProgress;
+        bool shouldBeAvailable = QuestManager.Instance.HasActiveQuest();
 
         if (portalCollider != null)
             portalCollider.enabled = shouldBeAvailable;

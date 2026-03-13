@@ -12,11 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e11294ea874656865aa60ede7feaeb, type: 3}
   m_Name: Quest2
   m_EditorClassIdentifier: 
-  questId: sort_objects
-  startDialogue: Hello traveler. Can you help me sort my harvset?
-  inProgressDialogue: Please sort my harvset.
-  readyDialogue: You've done it! Thank you so much.
-  completedDialogue: Thanks again for your help.
-  objectiveDescription: Sort the harvset
+  questId: book_detective
+  requiredQuests: []
+  startDialogue: "I've been thinking about mysteries lately. You know, strange crimes,
+    clever detectives\u2026 If you find a book like that , I'd love to read it."
+  inProgressDialogue: Did you check the library? I'm looking for a book about a famous
+    detective.
+  wrongItemDialogue: "Hmm\u2026 that's not the one."
+  readyDialogue: Ah! The Sherlock Holmes casebook! Perfect. I can't wait to read
+    these mysteries.
+  completedDialogue: These detective stories are brilliant. Thanks again for bringing
+    me the Sherlock Holmes casebook.
+  prerequisitesBlockedDialogue: 
+  activeQuestBlockedDialogue: 
+  requiredCategory: 0
+  requiredItem: Sherlock Holmes Casebook
+  requiredItemCount: 1
   availability: 1
   unavailableDialogue: Come back during the day.

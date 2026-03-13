@@ -12,11 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e11294ea874656865aa60ede7feaeb, type: 3}
   m_Name: Quest3
   m_EditorClassIdentifier: 
-  questId: shooting_range
-  startDialogue: Hello traveler. Can you help me?
-  inProgressDialogue: Please help me.
-  readyDialogue: You've done it! Thank you so much.
-  completedDialogue: Thanks again for your help.
-  objectiveDescription: TBD
+  questId: book_magic
+  requiredQuests:
+  - {fileID: 11400000, guid: bbc7d54bd395f814e81e1d4d4f9593b3, type: 2}
+  startDialogue: I've been curious about magic lately. If you find a book about that
+    in the library, I'd appreciate it.
+  inProgressDialogue: Still looking? It's more like the history of magic. Where it
+    came from, how it changed over time.
+  wrongItemDialogue: No, that's not quite it.
+  readyDialogue: Yes! That's exactly the book I needed. "A Brief History of Magic".
+    Thank you.
+  completedDialogue: This should be a fascinating read. Thanks again for bringing
+    me that book.
+  prerequisitesBlockedDialogue: You should help Elisa first.
+  activeQuestBlockedDialogue: 
+  requiredCategory: 0
+  requiredItem: Brief History of Magic
+  requiredItemCount: 1
   availability: 2
   unavailableDialogue: I only talk about this at night.
