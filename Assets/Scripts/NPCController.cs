@@ -146,7 +146,7 @@ public class NPCController : MonoBehaviour
         if (state == NPCState.WaitingForPlayer)
         {
             if (CanInteract())
-                HintManager.Instance.ShowInteraction(transform, "[E]");
+                HintManager.Instance.ShowInteraction(transform, "[E] Interact"); 
             else
                 HintManager.Instance.HideInteraction();
         }

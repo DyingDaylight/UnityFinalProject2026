@@ -39,13 +39,15 @@ public class HintManager : MonoBehaviour
         UpdateInteractionHintVisibilityByDialogue();
     }
     
-    public void ShowInteraction(Transform target, string text = "[E]")
+    public void ShowInteraction(Transform target, string text = "")
     {
-        if (target == null)
-            return;
+        if (target == null) return;
 
         interactionTarget = target;
-        interactionHint.SetText(text);
+
+        string finalPoint = string.IsNullOrEmpty(text) || text == "E" ? "[E] Interact" : text;
+    
+        interactionHint.SetText(finalPoint);
 
         if (dialogueSystem != null && dialogueSystem.IsDialogueActive())
             return;
