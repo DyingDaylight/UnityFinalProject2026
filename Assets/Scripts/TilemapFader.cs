@@ -12,6 +12,12 @@ public class TilemapFader : MonoBehaviour
         {
             playersInside++;
             UpdateVisibility();
+
+            Chest[] allChests = Object.FindObjectsByType<Chest>(FindObjectsSortMode.None);
+            foreach (Chest chest in allChests)
+            {
+                chest.ShowHintManually();
+            }
         }
     }
 
@@ -20,9 +26,14 @@ public class TilemapFader : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playersInside--;
-            
             if (playersInside < 0) playersInside = 0; 
             UpdateVisibility();
+
+            Chest[] allChests = Object.FindObjectsByType<Chest>(FindObjectsSortMode.None);
+            foreach (Chest chest in allChests)
+            {
+                chest.HideHintManually();
+            }
         }
     }
 

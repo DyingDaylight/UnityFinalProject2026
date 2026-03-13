@@ -28,7 +28,21 @@ public class Chest : MonoBehaviour
             Debug.Log("Chest opened");
         }
     }
+    public void ShowHintManually()
+    {
+        if (!isOpened && HintManager.Instance != null)
+        {
+            HintManager.Instance.ShowInteraction(transform, "Open Chest (Left click)");
+        }
+    }
 
+    public void HideHintManually()
+    {
+        if (HintManager.Instance != null)
+        {
+            HintManager.Instance.HideInteraction();
+        }
+    }
     private void OnMouseEnter()
     {
         if (!isOpened && HintManager.Instance != null)
@@ -67,6 +81,7 @@ public class Chest : MonoBehaviour
             
             rb.AddForce(jumpForce, ForceMode2D.Impulse);
         }
+        
         
     }
 }
