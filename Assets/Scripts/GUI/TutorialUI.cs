@@ -10,7 +10,7 @@ public class TutorialUI : MonoBehaviour
     
     void Start()
     {
-        PlayerPrefs.DeleteKey("TutorialShown");
+        //PlayerPrefs.DeleteKey("TutorialShown");
         if (PlayerPrefs.GetInt(Key, 0) == 1)
             return;
         
